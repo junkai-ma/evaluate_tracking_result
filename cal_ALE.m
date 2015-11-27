@@ -1,0 +1,23 @@
+function [ output ] = cal_ALE( region_group,gt,s_num,e_num )
+%CAL_ALE Summary of this function goes here
+%   Detailed explanation goes here
+
+len = e_num-s_num+1;
+distance = zeros(len,length(region_group));
+
+for alg_n = 1:length(region_group)
+    temp_d1 = region_group(alg_n).result(s_num:e_num,:);
+    temp_d2 = gt(s_num:e_num,:);
+    center1 = get_rect_center(temp_d1);
+    center2 = get_rect_center(temp_d2);
+    distance(:,alg_n)=get_distance(center1 - center2);
+end
+
+output = zeros(length(region_group),1);
+for i = 1:length(region_group)
+    temp_dis = remove_nan(distance(:,i));
+    output(i) = mean(temp_dis);
+end
+
+end
+
